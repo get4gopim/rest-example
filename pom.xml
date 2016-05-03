@@ -2,6 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springframework.samples.service.service</groupId>
   <artifactId>rest-example</artifactId>
+  <description>Spring Rest Example</description>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   
