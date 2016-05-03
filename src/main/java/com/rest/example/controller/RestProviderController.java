@@ -6,17 +6,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rest.example.domain.Customer;
 import com.rest.example.domain.CustomerList;
 
 @Controller
+//@RequestMapping(value="/service")
 public class RestProviderController {
 
 	private static final Logger LOGGER = Logger.getLogger(RestProviderController.class);
@@ -50,13 +53,24 @@ public class RestProviderController {
 	}
 	
 	@RequestMapping(value = "/customers/{id}", method = RequestMethod.GET, headers = "Accept=application/xml, application/json")
-	public @ResponseBody Customer findByCustomerId(@PathVariable("id") int id, HttpServletResponse response) {
+	public @ResponseBody Customer findByCustomerId(@PathVariable("id") int id) {
 		LOGGER.debug("Provider has received request to findByCustomerId");
 		
 		Customer result = findById(id);
 		
 		LOGGER.debug("return the results");
 		return result;
+	}
+	
+	@RequestMapping(value = "/customers/save", method = RequestMethod.POST, headers = "Accept=application/xml, application/json")
+	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
+		LOGGER.debug("Provider has received request to findByCustomerId");
+		
+		LOGGER.debug("Customer inpur = " + customer);
+		addCustomer (customer);
+		
+		LOGGER.debug("return the results");
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	private List<Customer> findCustomers() {
@@ -81,5 +95,11 @@ public class RestProviderController {
 		}
 		
 		return customer;
+	}
+	
+	private void addCustomer(Customer customer) {
+		if (listCustomer != null && !listCustomer.isEmpty()) {
+			listCustomer.add(customer);
+		}
 	}
 }
