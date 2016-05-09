@@ -22,11 +22,8 @@
 	        <property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- Mongo DB config -->
 	
-	
-	
-	<!-- Mongo Local Profile -->
+	<!-- Mongo Local Profile 
   	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 	     <constructor-arg name="mongo" ref="mongo"/>
 	     <constructor-arg name="databaseName" value="customer"/>
@@ -35,6 +32,19 @@
     <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
      	<property name="host" value="localhost"/>
      	<property name="port" value="27017"/>
-    </bean>	
+    </bean>	-->
+    
+    <!-- Mongo Cloud Profile -->
+    <mongo:db-factory
+	    id="mongoDbFactory"
+	    dbname="pwdtest"
+	    host="127.0.0.1"
+	    port="1234"
+	    username="test_user"
+	    password="test_pass" />
+    
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory" />
+    </bean> 
 
 </beans>
