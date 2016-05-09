@@ -3,8 +3,6 @@ package com.rest.example.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
