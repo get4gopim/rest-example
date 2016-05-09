@@ -1,9 +1,11 @@
 package com.rest.example.controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rest.example.domain.Customer;
 import com.rest.example.domain.CustomerList;
+import com.rest.example.repository.CustomerRepository;
 
 @Controller
 //@RequestMapping(value="/service")
@@ -24,14 +27,19 @@ public class RestProviderController {
 	
 	public List<Customer> listCustomer = new ArrayList<Customer>();
 	
+	@Autowired
+	private CustomerRepository customerDao;
+	
 	public RestProviderController() {
-		this.listCustomer = findCustomers();
+		//this.listCustomer = findCustomers();
 	}
 	
 	@RequestMapping(value = "/customers", method = RequestMethod.GET, headers = "Accept=application/xml, application/json")
 	public @ResponseBody CustomerList getAllCustomers() {
 		LOGGER.debug("Provider has received request to getAllCustomers");
 
+		this.listCustomer = findCustomers();
+		
 		CustomerList result = new CustomerList();
 		result.setListCustomer(listCustomer);
 
@@ -72,19 +80,21 @@ public class RestProviderController {
 	}
 	
 	private List<Customer> findCustomers() {
-		Customer customer = new Customer("Gopinathan", "33/5, Anjappar Street, Kolathur", 32);
-		customer.setId(1);
+		/*Customer customer = new Customer("Gopinathan", "33/5, Anjappar Street, Kolathur", 32);
+		customer.setId(new BigInteger("1"));
 		listCustomer.add(customer);
 		
 		customer = new Customer("Arjun", "33/5, Vel Street, Mettur", 32);
-		customer.setId(2);
+		customer.setId(new BigInteger("2"));
 		listCustomer.add(customer);
 		
-		return listCustomer;
+		return listCustomer; */
+		
+		return (List<Customer>) customerDao.findAll();
 	}
 	
 	private Customer findById(int id) {
-		Customer customer = new Customer();
+		/*Customer customer = new Customer();
 		
 		for (Customer cust : listCustomer) {
 			if (cust.getId() == id) {
@@ -92,12 +102,15 @@ public class RestProviderController {
 			}
 		}
 		
-		return customer;
+		return customer;*/
+		BigInteger big = new BigInteger("" + id);
+		return customerDao.findOne(big);
 	}
 	
 	private void addCustomer(Customer customer) {
-		if (listCustomer != null && !listCustomer.isEmpty()) {
+		/*if (listCustomer != null && !listCustomer.isEmpty()) {
 			listCustomer.add(customer);
-		}
+		}*/
+		customerDao.save(customer);
 	}
 }

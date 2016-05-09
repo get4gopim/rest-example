@@ -20,6 +20,10 @@
 
 		<!-- Spring -->
 		<spring-framework.version>3.2.3.RELEASE</spring-framework.version>
+		<spring.data.mongo.version>1.1.1.RELEASE</spring.data.mongo.version>
+
+		<!-- Cloud -->
+		<org.cloudfoundry-version>0.8.1</org.cloudfoundry-version>
 
 		<!-- Jakson -->
 		<jackson.version>2.4.1</jackson.version>
@@ -31,6 +35,14 @@
 		<junit.version>4.11</junit.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Framework Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 
 		<!-- Spring MVC -->
@@ -39,6 +51,40 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-framework.version}</version>
 		</dependency>
+
+		<!-- Mongo DB -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring.data.mongo.version}</version>
+		</dependency>
+
+		<!-- Mongo DB Driver -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<!-- CloudFoundry -->
+		<dependency>
+			<groupId>org.cloudfoundry</groupId>
+			<artifactId>cloudfoundry-runtime</artifactId>
+			<version>${org.cloudfoundry-version}</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-localconfig-connector</artifactId> 
+			<version>1.1.1.RELEASE</version> </dependency> -->
 
 		<!-- Other Web dependencies -->
 		<dependency>
@@ -127,6 +173,31 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+
+			<!-- cloudfoundry plugin -->
+			<plugin>
+				<groupId>org.cloudfoundry</groupId>
+				<artifactId>cf-maven-plugin</artifactId>
+				<version>1.1.2</version>
+				<configuration>
+					<server>cloud-foundry-credentials</server>
+					<org>get4gopi-org</org>
+					<space>development</space>
+					<target>http://api.run.pivotal.io</target>
+					<appname>mgallery</appname>
+					<url>mgallery.get4gopi.org</url>
+					<memory>1024</memory>
+					<services>
+						<service>
+							<name>mongolab</name>
+							<label>mongolab</label>
+							<provider>mongolab</provider>
+							<version>n/a</version>
+							<plan>sandbox</plan>
+						</service>
+					</services>
 				</configuration>
 			</plugin>
 		</plugins>

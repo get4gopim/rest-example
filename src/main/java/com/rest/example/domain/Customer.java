@@ -1,11 +1,18 @@
 package com.rest.example.domain;
 
+import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @XmlRootElement(name="Customer")
+@Document
 public class Customer {
 	
-	private int id;
+	@Id
+	private BigInteger id;
 	private String name;
 	private String address;
 	private int age;
@@ -26,11 +33,11 @@ public class Customer {
 		return "Customer [id=" + id + ", name=" + name + "]";
 	}
 
-	public int getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 
