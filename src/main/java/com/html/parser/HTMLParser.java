@@ -10,15 +10,24 @@ public class HTMLParser {
 	public static HTMLParser PARSER = new HTMLParser();
 	
 	public static void main(String[] args) throws Exception {
-		//PARSER.listMovieNames();
-		PARSER.getMovieDetails("https://en.wikipedia.org/wiki/From_Vegas_to_Macau_III");
+		PARSER.listMovieNames();
+		//PARSER.getMovieDetails("https://en.wikipedia.org/wiki/From_Vegas_to_Macau_III");
 	}
 
 	public void listMovieNames() throws Exception {
-		Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/2016_in_film").get();
+		Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/1999_in_film").get();
 		Element table = doc.select("div#mw-content-text table").get(2);
+		Elements rows = table.select("tr");
 		
-		for (Element row : table.select("tr")) {
+		System.out.println("size = " + rows.size());
+		
+		if (rows.size() <= 2) {
+			table = doc.select("div#mw-content-text table").get(3);
+			rows = table.select("tr");
+			System.out.println("revised size = " + rows.size());
+		}		
+		
+		for (Element row : rows) {
 			Elements link = row.select("td i a");
 			String absHref = link.attr("abs:href");
 
@@ -26,7 +35,7 @@ public class HTMLParser {
 				System.out.println(link.text() + " (" + absHref + ") ");
 				System.out.println(" ---------------------------------------------------- ");
 				
-				PARSER.getMovieDetails(absHref);
+				//PARSER.getMovieDetails(absHref);
 				
 				System.out.println("\n");
 			}
@@ -61,19 +70,19 @@ public class HTMLParser {
 					if (starringDiv.size() == 0) {
 						starringDiv = row.select("a");
 					}
-					System.out.println("starringDiv = " + starringDiv);
+					//System.out.println("starringDiv = " + starringDiv);
 					
 					if (starringDiv.size() >= 2) {
 						Element actor = starringDiv.get(0);
 						Element actress = starringDiv.get(1);
 						System.out.println("Actor = " + actor.text());
-						System.out.println("Actress = " + actor.text());
+						System.out.println("Actress = " + actress.text());
 					}
 					
 					
-				}  else {
+				} /*else {
 					System.out.println(th.text() + " :: " + td.text());
-				}				
+				}*/				
 				
 			}
 			
